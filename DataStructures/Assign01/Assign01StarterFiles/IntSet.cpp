@@ -80,8 +80,20 @@ bool IntSet::contains(int anInt) const
 
 bool IntSet::isSubsetOf(const IntSet& otherIntSet) const
 {
-   cout << "isSubsetOf() is not implemented yet..." << endl;
-   return false; // dummy value returned
+   int truth = 0;
+
+   if (this->isEmpty())
+	return true;
+   for(int i = 0; i < this->size(); i++)
+      {
+	 if(otherIntSet.contains(data[i]))
+		truth++;
+      }
+   if(truth == this->size())
+	return true;
+   else
+	return false;
+		
 }
 
 void IntSet::DumpData(ostream& out) const
@@ -96,20 +108,48 @@ void IntSet::DumpData(ostream& out) const
 
 IntSet IntSet::unionWith(const IntSet& otherIntSet) const
 {
-   cout << "unionWith() is not implemented yet..." << endl;
-   return IntSet(); // dummy IntSet object returned
+   IntSet both = otherIntSet;
+
+   assert(size() + (both.subtract(*this)).size() <= MAX_SIZE);
+
+   int sizeBoth =  size() + (both.subtract(*this)).size();
+
+   for(int i = 0; i < sizeBoth; i++)
+      {
+	  if(!both.contains(data[i]) && this->contains(data[i]))
+	       both.add(data[i]);
+      }
+   return both;
 }
 
 IntSet IntSet::intersect(const IntSet& otherIntSet) const
 {
-   cout << "intersect() is not implemented yet..." << endl;
-   return IntSet(); // dummy IntSet object returned
+   IntSet only;
+   int sizeBoth;
+
+   if(this->size() > only.size())
+       sizeBoth  = this->size();
+   else
+       sizeBoth = otherIntSet.size();
+
+   for(int i = 0; i < sizeBoth; i++)
+      {
+	  if(this->contains(data[i]) && otherIntSet.contains(data[i]))
+	      only.add(data[i]);
+      }
+   return only;
 }
 
 IntSet IntSet::subtract(const IntSet& otherIntSet) const
 {
-   cout << "subtract() is not implemented yet..." << endl;
-   return IntSet(); // dummy IntSet object returned
+   IntSet diff;
+
+   for(int i = 0; i < this->size(); i++)
+      {
+      if(!otherIntSet.contains(data[i]))
+	  diff.add(data[i]);
+      }
+   return diff;
 }
 
 void IntSet::reset()
@@ -152,8 +192,10 @@ bool IntSet::remove(int anInt)
 
 bool equal(const IntSet& is1, const IntSet& is2)
 {
-   cout << "equal() is not implemented yet..." << endl;
-   return false; // dummy value returned
+   if(is1.isSubsetOf(is2) && is2.isSubsetOf(is1))
+	return true;
+   else
+	return false;
 }
 
 
