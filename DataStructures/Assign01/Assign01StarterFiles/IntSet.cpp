@@ -48,12 +48,13 @@ using namespace std;
 
 IntSet::IntSet()
 {
-   used = 0;
+   used = 0;   // total amount of integers in set, set to 0 on 
+	       // initialization
 }
 
 int IntSet::size() const
 {
-   return used; 
+   return used;
 }
 
 
@@ -67,10 +68,10 @@ bool IntSet::isEmpty() const
 
 bool IntSet::contains(int anInt) const
 {
-   if (used == 0)
+   if (used == 0)	
 	return false;
-   for (int i = 0; i < used; i++)
-   {
+   for (int i = 0; i < used; i++)  //loop through set, if anInt is found
+   {                               //return true
 	if (data[i] == anInt)
 	   return true;
    }
@@ -80,24 +81,24 @@ bool IntSet::contains(int anInt) const
 
 bool IntSet::isSubsetOf(const IntSet& otherIntSet) const
 {
-   int truth = 0;
+   int truth = 0;  // local int for counting 
 
-   if (this->isEmpty())
-	return true;
-   for(int i = 0; i < this->size(); i++)
+   if (this->isEmpty())  //if invoking set is empty, automatically true
+	return true;     //(empty set is a subset of every set)
+   for(int i = 0; i < this->size(); i++)  
       {
-	 if(otherIntSet.contains(data[i]))
-		truth++;
-      }
-   if(truth == this->size())
-	return true;
+	 if(otherIntSet.contains(data[i]))  //if otherIntSet contains data
+		truth++;                    //in invoking set, then add 1 to
+      }                                     //truth
+   if(truth == this->size())  //if truth equals size of invoking set
+	return true;          //then invoking set is subset of otherIntSet
    else
 	return false;
 		
 }
 
 void IntSet::DumpData(ostream& out) const
-{  // already implemented ... DON'T change anything
+{  
    if (used > 0)
    {
       out << data[0];
@@ -108,13 +109,12 @@ void IntSet::DumpData(ostream& out) const
 
 IntSet IntSet::unionWith(const IntSet& otherIntSet) const
 {
-   IntSet both = otherIntSet;
+   IntSet both = otherIntSet;  //local copy of otherIntSet
 
    assert(size() + (both.subtract(*this)).size() <= MAX_SIZE);
-
    int sizeBoth =  size() + (both.subtract(*this)).size();
 
-   for(int i = 0; i < sizeBoth; i++)
+   for(int i = 0; i < sizeBoth; i++) //loop through set
       {
 	  if(!both.contains(data[i]) && this->contains(data[i]))
 	       both.add(data[i]);
@@ -124,16 +124,16 @@ IntSet IntSet::unionWith(const IntSet& otherIntSet) const
 
 IntSet IntSet::intersect(const IntSet& otherIntSet) const
 {
-   IntSet only;
-   int sizeBoth;
+   IntSet only;  //local IntSet
+   int sizeBoth; //int for size of set
 
-   if(this->size() > only.size())
-       sizeBoth  = this->size();
+   if(this->size() > only.size())  //compare size of set and set sizeBoth
+       sizeBoth  = this->size();   //equal to whichever is bigger
    else
        sizeBoth = otherIntSet.size();
 
-   for(int i = 0; i < sizeBoth; i++)
-      {
+   for(int i = 0; i < sizeBoth; i++)  //loop through set, if both sets contain
+      {                               //desired element, add element to only
 	  if(this->contains(data[i]) && otherIntSet.contains(data[i]))
 	      only.add(data[i]);
       }
@@ -142,29 +142,31 @@ IntSet IntSet::intersect(const IntSet& otherIntSet) const
 
 IntSet IntSet::subtract(const IntSet& otherIntSet) const
 {
-   IntSet diff;
+   IntSet diff;  //local IntSet
 
-   for(int i = 0; i < this->size(); i++)
+   for(int i = 0; i < this->size(); i++) //loop through invoking set
       {
-      if(!otherIntSet.contains(data[i]))
-	  diff.add(data[i]);
-      }
+      if(!otherIntSet.contains(data[i])) //if otherIntSet does not contain
+	  diff.add(data[i]);             //element in invoking set, add that 
+      }                                  //element to local IntSet
    return diff;
 }
 
 void IntSet::reset()
 {
-   for (int i =  0; i < used; ++i)
-	data[i] = 0;
-   used = 0;
+   for (int i =  0; i < used; ++i)  //loop through set and set all 
+	data[i] = 0;                //elements to 0
+   used = 0;                        //reset used to 0
 }
 
 bool IntSet::add(int anInt)
 {
-   if (!contains(anInt))
+   assert(contains(anInt) ? size() <= MAX_SIZE : size() < MAX_SIZE);
+
+   if (!contains(anInt))  //if set does not already contain anInt
    {
-      data[used] = anInt;
-      used++;
+      data[used] = anInt;  //set next element equal to anInt
+      used++;              //update used
       return true;
    }
    else
@@ -173,26 +175,26 @@ bool IntSet::add(int anInt)
 
 bool IntSet::remove(int anInt)
 {
-   if (!contains(anInt))
+   if (!contains(anInt))  //if set does not contain anInt, do nothing
 	return false;
    else
    {
-	for (int i = 0; i < used; i++)
-	{
-		if (data[i] == anInt)
+      for (int i = 0; i < used; i++)  //loop through set
+	  {
+	     if (data[i] == anInt)  //if element at position i = anInt
 		{
-			for (int j = i; j < used; j++)
-				data[j] = data[j + 1];
+		   for (int j = i; j < used; j++) //loop through rest of set
+		      data[j] = data[j + 1]; //copy next element to current pos
 		}
-	}
-	used--;
+	  }
+	used--;  //update used
 	return true;
     }
 }
 
 bool equal(const IntSet& is1, const IntSet& is2)
 {
-   if(is1.isSubsetOf(is2) && is2.isSubsetOf(is1))
+   if(is1.isSubsetOf(is2) && is2.isSubsetOf(is1)) 
 	return true;
    else
 	return false;
