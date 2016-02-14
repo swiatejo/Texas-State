@@ -47,18 +47,28 @@ namespace CS3358_Sp2016
 {
    // CONSTRUCTORS and DESTRUCTOR
    sequence::sequence(size_type initial_capacity)
+	
    {
-      cout << "sequence(size_type initial_capacity) not implemented yet" << endl;
+      if (initial_capacity < 1)
+	capacity = DEFAULT_CAPACITY;
+      capacity = initial_capacity;
+      data = new value_type[capacity];
+      current_index = 0;
+      used = 0;
    }
 
    sequence::sequence(const sequence& source)
    {
-      cout << "sequence(const sequence& source) not implemented yet" << endl;
+      data = new value_type[source.capacity];
+      capacity = source.capacity;
+      used = source.used;
+      current_index = source.current_index;
+      copy(source.data, source.data + used, data);
    }
 
    sequence::~sequence()
    {
-      cout << "~sequence() not implemented yet" << endl;
+      delete [] data;
    }
 
    // MODIFICATION MEMBER FUNCTIONS
@@ -69,22 +79,46 @@ namespace CS3358_Sp2016
 
    void sequence::start()
    {
-      cout << "start() not implemented yet" << endl;
+      current_index = 0;
    }
 
    void sequence::advance()
    {
-      cout << "advance() not implemented yet" << endl;
+      assert (is_item());
+	current_index++;
    }
 
    void sequence::insert(const value_type& entry)
    {
-      cout << "insert(const value_type& entry) not implemented yet" << endl;
+      if (used == capacity)
+	resize(capacity * 1.25);
+      if (!is_item())
+	{
+	  data[current_index] = entry;
+	  used++;
+	}
+      else 
+	{
+	for (size_type i = used; i > current_index; i--)
+	   data[i] = data[i-1];
+        data[current_index] = entry;
+	used++;   
+	}   
    }
 
    void sequence::attach(const value_type& entry)
    {
-      cout << "attach(const value_type& entry) not implemented yet" << endl;
+      if (used == capacity)
+	resize(capacity * 1.25);
+      if (!is_item())
+	{
+	  data[current_index] = entry;
+	  used++;
+	}
+      for (size_type i = used; i > current_index + 1; i--)
+	 data[i] = data[i-1];
+      data[current_index] = entry;
+      used++;
    }
 
    void sequence::remove_current()
@@ -101,20 +135,20 @@ namespace CS3358_Sp2016
    // CONSTANT MEMBER FUNCTIONS
    sequence::size_type sequence::size() const
    {
-      cout << "size() not implemented yet" << endl;
-      return 0; // dummy value returned
+      return used;
    }
 
    bool sequence::is_item() const
    {
-      cout << "is_item() not implemented yet" << endl;
-      return false; // dummy value returned
+      if (current_index < used)
+	return true;
+      else
+	return false;
    }
 
    sequence::value_type sequence::current() const
    {
-      cout << "current() not implemented yet" << endl;
-      return value_type(); // dummy value returned
+      return data[current_index];
    }
 }
 
