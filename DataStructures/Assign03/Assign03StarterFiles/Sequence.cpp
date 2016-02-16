@@ -74,7 +74,16 @@ namespace CS3358_Sp2016
    // MODIFICATION MEMBER FUNCTIONS
    void sequence::resize(size_type new_capacity)
    {
-      cout << "resize(size_type new_capacity) not implemented yet" << endl;
+      if (new_capacity < used)
+	new_capacity = used;
+      if (new_capacity < 1)
+	new_capacity = 1;
+      capacity = new_capacity;
+      value_type * newData = new value_type[capacity];
+      for (size_type i = 0; i < used; ++i)
+	 newData[i] = data[i];
+      delete [] data;
+      data = newData;
    }
 
    void sequence::start()
@@ -85,7 +94,7 @@ namespace CS3358_Sp2016
    void sequence::advance()
    {
       assert (is_item());
-	current_index++;
+      current_index++;
    }
 
    void sequence::insert(const value_type& entry)
@@ -94,8 +103,19 @@ namespace CS3358_Sp2016
 	resize(capacity * 1.25);
       if (!is_item())
 	{
-	  data[current_index] = entry;
-	  used++;
+	  if (current_index > 0)
+	    {
+	      start();
+	      for (size_type i = used; i > current_index; i--)
+		 data[i] = data[i-1];
+	      data[current_index] = entry;
+	      used++;
+	    }
+	  else
+	    {
+	      data[current_index] = entry;
+	      used++;
+	    }
 	}
       else 
 	{
@@ -112,23 +132,46 @@ namespace CS3358_Sp2016
 	resize(capacity * 1.25);
       if (!is_item())
 	{
-	  data[current_index] = entry;
+          data[current_index] = entry;
 	  used++;
 	}
-      for (size_type i = used; i > current_index + 1; i--)
-	 data[i] = data[i-1];
-      data[current_index] = entry;
-      used++;
+      else 
+	{
+          for (size_type i = used; i > current_index + 1; i--)
+	     data[i] = data[i-1];
+          advance();
+          data[current_index] = entry;
+          used++;
+	}
    }
 
    void sequence::remove_current()
    {
-      cout << "remove_current() not implemented yet" << endl;
+      assert(is_item());
+      if (current_index == used - 1)
+	{
+	  used--;
+	}
+      else
+	{
+	  for (size_type i = current_index; i < used - 1; ++i)
+	     data[i] = data[i+1];
+	  used--;
+	}
    }
 
    sequence& sequence::operator=(const sequence& source)
    {
-      cout << "operator=(const sequence& source) not implemented yet" << endl;
+      if (this != &source)
+	{
+	  value_type* newData = new value_type[source.capacity];
+	  for (size_type i = 0; i < source.used; ++i)
+	     newData[i] = source.data[i];
+	  delete [] data;
+	  data = newData;
+	  capacity = source.capacity;
+	  used = source.used;
+	}
       return *this;
    }
 
@@ -140,7 +183,7 @@ namespace CS3358_Sp2016
 
    bool sequence::is_item() const
    {
-      if (current_index < used)
+      if (current_index < used && used > 0)
 	return true;
       else
 	return false;
