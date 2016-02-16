@@ -47,14 +47,12 @@ namespace CS3358_Sp2016
 {
    // CONSTRUCTORS and DESTRUCTOR
    sequence::sequence(size_type initial_capacity)
-	
+	: used(0), current_index(0), capacity(initial_capacity)	
    {
       if (initial_capacity < 1)
 	capacity = DEFAULT_CAPACITY;
       capacity = initial_capacity;
       data = new value_type[capacity];
-      current_index = 0;
-      used = 0;
    }
 
    sequence::sequence(const sequence& source)
@@ -99,11 +97,11 @@ namespace CS3358_Sp2016
 
    void sequence::insert(const value_type& entry)
    {
-      if (used == capacity)
+      if (used == capacity)	//if items equal size of array, resize
 	resize(capacity * 1.25);
-      if (!is_item())
+      if (!is_item())	//if no current item
 	{
-	  if (current_index > 0)
+	  if (current_index > 0)	//if current_index is equal to used
 	    {
 	      start();
 	      for (size_type i = used; i > current_index; i--)
@@ -111,13 +109,13 @@ namespace CS3358_Sp2016
 	      data[current_index] = entry;
 	      used++;
 	    }
-	  else
+	  else	//if current_index is 0
 	    {
 	      data[current_index] = entry;
 	      used++;
 	    }
 	}
-      else 
+      else 	//if there is a current item
 	{
 	for (size_type i = used; i > current_index; i--)
 	   data[i] = data[i-1];
@@ -128,14 +126,14 @@ namespace CS3358_Sp2016
 
    void sequence::attach(const value_type& entry)
    {
-      if (used == capacity)
+      if (used == capacity)	//if items equal size of array, resize
 	resize(capacity * 1.25);
-      if (!is_item())
+      if (!is_item())	//if no current item, works for index at 0 and when index equal used
 	{
           data[current_index] = entry;
 	  used++;
 	}
-      else 
+      else 	//if there is a current item
 	{
           for (size_type i = used; i > current_index + 1; i--)
 	     data[i] = data[i-1];
@@ -171,6 +169,7 @@ namespace CS3358_Sp2016
 	  data = newData;
 	  capacity = source.capacity;
 	  used = source.used;
+	  current_index = source.current_index;
 	}
       return *this;
    }
