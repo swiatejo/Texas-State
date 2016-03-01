@@ -5,9 +5,8 @@
 #include <iostream>    // provides cout and cin
 #include <cstdlib>     // provides EXIT_SUCCESS
 #include "sequence.h"
-namespace seqOfNum  = CS3358_SP16_A04_sequenceOfNum;
-namespace seqOfChar = CS3358_SP16_A04_sequenceOfChar;
 using namespace std;
+using namespace CS3358_SP16_A04;
 
 // PROTOTYPES for functions used by this test program:
 
@@ -19,10 +18,8 @@ char get_user_command();
 // Post: The user is prompted to enter a one character command.
 //       The next character is read (skipping blanks and newline
 //       characters), and this character is returned.
-void show_list(seqOfNum::sequence src);
-// Pre: (none)
-// Post: The items of src are printed to cout (one per line).
-void show_list(seqOfChar::sequence src);
+template <class Item>
+void show_list(sequence<Item> src);
 // Pre: (none)
 // Post: The items of src are printed to cout (one per line).
 int get_object_num();
@@ -50,8 +47,8 @@ char get_character();
 
 int main(int argc, char *argv[])
 {
-   seqOfNum::sequence s1;  // A sequence of double for testing
-   seqOfChar::sequence s2; // A sequence of char for testing
+   sequence<double> s1;  // A sequence of double for testing
+   sequence<char> s2; // A sequence of char for testing
    int objectNum;    // A number to indicate selection of s1 or s2
    double numHold;   // Holder for a real number
    char charHold;    // Holder for a character
@@ -291,19 +288,12 @@ char get_user_command()
    cout << command << endl;
    return command;
 }
-
-void show_list(seqOfNum::sequence src)
+template <class Item>
+void show_list(sequence<Item> src)
 {
    for ( src.start(); src.is_item(); src.advance() )
       cout << src.current() << "  ";
 }
-
-void show_list(seqOfChar::sequence src)
-{
-   for ( src.start(); src.is_item(); src.advance() )
-      cout << src.current() << "  ";
-}
-
 int get_object_num()
 {
    int result;
