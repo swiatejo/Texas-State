@@ -172,7 +172,7 @@ bool IntSet::isSubsetOf(const IntSet& otherIntSet) const
 }
 
 void IntSet::DumpData(ostream& out) const
-{  // already implemented ... DON'T change anything
+{  
    if (used > 0)
    {
       out << data[0];
@@ -183,28 +183,24 @@ void IntSet::DumpData(ostream& out) const
 
 IntSet IntSet::unionWith(const IntSet& otherIntSet) const
 {
-   IntSet both (otherIntSet);
-   
-   int sizeBoth = size() + (both.subtract(*this)).size();
+   IntSet both = *this;
 
-   for (int i = 0; i < sizeBoth; ++i)
-      {
-	 if (!both.contains(data[i]) && contains(data[i]))
-             both.add(data[i]);
-      }
+   for (int i = 0; i < otherIntSet.size(); ++i)
+      both.add(otherIntSet.data[i]);
+
    return both;
 }
 
 IntSet IntSet::intersect(const IntSet& otherIntSet) const
 {
-   IntSet only;  //local IntSet
+   IntSet only;
 
    int sizeBoth = size() + (otherIntSet.subtract(*this)).size();
 
-   for(int i = 0; i < sizeBoth; ++i)  //loop through set, if both sets contain
-      {                               //desired element, add element to only
-          if(this->contains(data[i]) && otherIntSet.contains(data[i]))
-              only.add(data[i]);  //need to remember to resize only
+   for (int i = 0; i < sizeBoth; ++i)
+      {
+        if (contains(data[i]) && otherIntSet.contains(data[i]))
+	   only.add(data[i]);
       }
    return only;
 
@@ -223,12 +219,7 @@ IntSet IntSet::subtract(const IntSet& otherIntSet) const
 
 }
 
-void IntSet::reset()
-{
-   for (int i =  0; i < used; ++i)  //loop through set and set all 
-        data[i] = 0;                //elements to 0
-   used = 0;  
-}
+void IntSet::reset() { used = 0; }
 
 bool IntSet::add(int anInt)    //use resize in this function primarily, when adding elements
 {
@@ -258,16 +249,16 @@ bool IntSet::remove(int anInt)
         return false;
    else
    {
-      for (int i = 0; i < used; i++)  //loop through set
-          {
-             if (data[i] == anInt)  //if element at position i = anInt
-                {
-                   for (int j = i; j < used; j++) //loop through rest of set
-                      data[j] = data[j + 1]; //copy next element to current pos
-                }
+      for (int i = 0; i < used; ++i)  //loop through set
+         {
+           if (data[i] == anInt)  //if element at position i = anInt
+             {
+               for (int j = i; j < used - 1; ++j) //loop through rest of set
+                  data[j] = data[j + 1]; //copy next element to current pos
+             }
           }
-        used--;  //update used
-        return true;
+       used--;  //update used
+       return true;
     }
 
 }

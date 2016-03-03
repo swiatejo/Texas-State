@@ -10,7 +10,7 @@
 //   with a default constructor, a copy constructor, an assignment operator, and operators to 
 //   test for equality (x == y) and non-equality (x != y).  The definition sequence::size_type is 
 //   the data type of any variable that keeps track of how many items are in a bag.  The static
-//   const DEFAULT_CAPACITY is the initial capacity of a bag created by the default constructor.
+//   const CAPACITY is the initial capacity of a bag created by the default constructor.
 //
 // CONSTRUCTOR for the sequence<Item> template class:
 //   sequence()
