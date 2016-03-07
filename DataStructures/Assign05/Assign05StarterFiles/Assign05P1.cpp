@@ -97,7 +97,7 @@ int main()
       PruneArray(intArr_LE5, used_LE5, 'L');
       PruneArray(intArr_GE7, used_GE7, 'G');
 
-      // DebugShowCase(testCasesDone, TEST_CASES_TO_DO, intArr_INI, used_INI);
+      DebugShowCase(testCasesDone, TEST_CASES_TO_DO, intArr_INI, used_INI);
 
       RemBadSplitGood(head, head_LE5, head_GE7);
 

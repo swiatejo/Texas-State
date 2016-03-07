@@ -20,6 +20,7 @@ void   ShowAll(std::ostream& outs, Node* headPtr);
 void   FindMinMax(Node* headPtr, int& minValue, int& maxValue);
 double FindAverage(Node* headPtr);
 void   ListClear(Node*& headPtr, int noMsg = 0);
+void   RemBadSplitGood(Node*& headPtr1, Node*& headPtr2, Node*& headPtr3);
 
 // prototype of RemBadSplitGood of Assignment 5 Part 1
 

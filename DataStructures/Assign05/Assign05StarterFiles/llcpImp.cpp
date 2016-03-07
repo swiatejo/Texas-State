@@ -244,3 +244,101 @@ void ListClear(Node*& headPtr, int noMsg)
 }
 
 // definition of RemBadSplitGood of Assignment 5 Part 1
+
+void RemBadSplitGood(Node*& headPtr1, Node*& headPtr2, Node*& headPtr3)
+{
+   int countlist1 = 0;
+   bool list2Empty = true;
+   bool list3Empty = true;
+   Node *cursor1 = headPtr1;
+   Node *cursor2, *cursor3, *pre = 0;
+   if(headPtr1 == 0)
+     {
+       Node *newNodePtr1 = new Node;
+       Node *newNodePtr2 = new Node;
+       Node *newNodePtr3 = new Node;
+       newNodePtr1->data = -99;
+       newNodePtr1->link = headPtr1;
+       headPtr1 = newNodePtr1;
+       newNodePtr2->data = -99;
+       newNodePtr2->link = 0;
+       headPtr2 = newNodePtr2;
+       newNodePtr3->data = -99;
+       newNodePtr3->link = 0;
+       headPtr3 = newNodePtr3;
+       return;
+     }
+   while(cursor1->link != 0)
+     {
+	if(cursor1->data == 6)
+          {
+	    cursor1 = cursor1->link;
+            countlist1++;
+          }
+	if(cursor1->data >= 0 && cursor1->data <= 5)
+	  {
+	   if(list2Empty)
+	     {
+               headPtr2 = cursor1;
+	       cursor2 = headPtr2;
+	       cursor1 = cursor1->link;
+	       list2Empty = false;
+	     }
+	    else
+	     {
+	        cursor2->link = cursor1;
+		cursor1 = cursor1->link;
+	     }
+	   }
+	 if(cursor1->data >= 7 && cursor1->data <= 9)
+	   {
+	     if(list3Empty)
+	       {
+		 headPtr3 = cursor1;
+	         cursor3 = headPtr3;
+                 cursor1 = cursor1->link;
+	         list3Empty = false;
+               }
+              else
+               {
+                 cursor3->link = cursor1;
+	         cursor1 = cursor1->link;
+               }
+            }
+          if(cursor1->data < 0 || cursor1->data > 9)
+            {
+	      pre = cursor1;
+              cursor1 = cursor1->link;
+
+	      if(cursor1 == headPtr1)
+	        headPtr1 = headPtr1->link;
+	      else if(cursor1->link ==  0)
+		delete pre;
+	      else
+	        pre->link = cursor1->link;
+                delete pre;
+             }
+     }
+   if(countlist1 == 0)
+     {
+       Node *newNodePtr1 = new Node;
+       newNodePtr1->data = -99;
+       newNodePtr1->link = 0;
+       headPtr1 = newNodePtr1;
+     }
+   if(list2Empty)
+     {
+       Node *newNodePtr2 = new Node;
+       newNodePtr2->data = -99;
+       newNodePtr2->link = 0;
+       headPtr2 = newNodePtr2;
+     }
+   if(list3Empty)
+     {
+       Node *newNodePtr3 = new Node;
+       newNodePtr3->data = -99;
+       newNodePtr3->link = 0;
+       headPtr3 = newNodePtr3;
+     }
+ 
+} 
