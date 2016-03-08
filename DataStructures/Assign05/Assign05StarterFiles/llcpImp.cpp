@@ -272,8 +272,21 @@ void RemBadSplitGood(Node*& headPtr1, Node*& headPtr2, Node*& headPtr3)
      {
 	if(cursor1->data == 6)
           {
-	    cursor1 = cursor1->link;
-            countlist1++;
+	    if(countlist1 == 0)
+              {
+	        headPtr1 = cursor1;
+                pre = cursor1;
+	        cursor1 = cursor1->link;
+	        pre->link = 0;
+	      }
+            else 
+              {
+	        pre->link = cursor1;
+	        pre = cursor1;
+                cursor1 = cursor1->link;
+		pre->link = 0;
+              }
+	    countlist1++;
           }
 	if(cursor1->data >= 0 && cursor1->data <= 5)
 	  {
@@ -281,12 +294,14 @@ void RemBadSplitGood(Node*& headPtr1, Node*& headPtr2, Node*& headPtr3)
 	     {
                headPtr2 = cursor1;
 	       cursor2 = headPtr2;
+	       pre = cursor1;
 	       cursor1 = cursor1->link;
 	       list2Empty = false;
 	     }
 	    else
 	     {
 	        cursor2->link = cursor1;
+	        pre = cursor1;
 		cursor1 = cursor1->link;
 	     }
 	   }
@@ -296,28 +311,25 @@ void RemBadSplitGood(Node*& headPtr1, Node*& headPtr2, Node*& headPtr3)
 	       {
 		 headPtr3 = cursor1;
 	         cursor3 = headPtr3;
+		 pre = cursor1;
                  cursor1 = cursor1->link;
 	         list3Empty = false;
                }
               else
                {
                  cursor3->link = cursor1;
+		 pre = cursor1;
 	         cursor1 = cursor1->link;
                }
             }
           if(cursor1->data < 0 || cursor1->data > 9)
             {
-	      pre = cursor1;
-              cursor1 = cursor1->link;
-
 	      if(cursor1 == headPtr1)
-	        headPtr1 = headPtr1->link;
-	      else if(cursor1->link ==  0)
-		delete pre;
-	      else
-	        pre->link = cursor1->link;
-                delete pre;
-             }
+		headPtr1 = headPtr1->link;
+	      else 
+		pre->link = cursor1->link;
+	      delete cursor1;
+            }
      }
    if(countlist1 == 0)
      {

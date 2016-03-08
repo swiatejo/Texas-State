@@ -114,6 +114,9 @@ int main()
          }
          else
          {
+	    ShowAll(cout, head);
+	    ShowAll(cout, head_LE5);
+	    ShowAll(cout, head_GE7);
             cout << "\"==6\" list node-count error ... too many (circular list?)" << endl;
             cout << "test_case: ";
             ShowArray(intArr_INI, used_INI);
