@@ -247,11 +247,11 @@ void ListClear(Node*& headPtr, int noMsg)
 
 void RemBadSplitGood(Node*& headPtr1, Node*& headPtr2, Node*& headPtr3)
 {
-   int countlist1 = 0;
+   bool list1Empty = true;
    bool list2Empty = true;
    bool list3Empty = true;
-   Node *cursor1 = headPtr1;
-   Node *cursor2, *cursor3, *pre = 0;
+   Node *cursor = headPtr1;
+   Node *cursor1, *cursor2, *cursor3, *current = 0;
    if(headPtr1 == 0)
      {
        Node *newNodePtr1 = new Node;
@@ -268,70 +268,80 @@ void RemBadSplitGood(Node*& headPtr1, Node*& headPtr2, Node*& headPtr3)
        headPtr3 = newNodePtr3;
        return;
      }
-   while(cursor1->link != 0)
+   while(cursor != 0)
      {
-	if(cursor1->data == 6)
+	if((cursor != 0) && (cursor->data == 6))
           {
-	    if(countlist1 == 0)
+	    if(list1Empty)
               {
-	        headPtr1 = cursor1;
-                pre = cursor1;
-	        cursor1 = cursor1->link;
-	        pre->link = 0;
+	        headPtr1 = cursor;
+                cursor1 = headPtr1;
+	        cursor = cursor->link;
+                cursor1->link = 0;
+                list1Empty = false;
 	      }
             else 
-              {
-	        pre->link = cursor1;
-	        pre = cursor1;
+              {  
+                cursor1->link = cursor;
                 cursor1 = cursor1->link;
-		pre->link = 0;
+                cursor = cursor->link;
+                cursor1->link = 0;
               }
-	    countlist1++;
-          }
-	if(cursor1->data >= 0 && cursor1->data <= 5)
+	   
+           }
+	 if((cursor != 0) && (cursor->data >= 0 && cursor->data <= 5))
 	  {
 	   if(list2Empty)
 	     {
-               headPtr2 = cursor1;
+               headPtr2 = cursor;
 	       cursor2 = headPtr2;
-	       pre = cursor1;
-	       cursor1 = cursor1->link;
+	       cursor = cursor->link;
+               cursor2->link = 0;
 	       list2Empty = false;
 	     }
 	    else
 	     {
-	        cursor2->link = cursor1;
-	        pre = cursor1;
-		cursor1 = cursor1->link;
+	        cursor2->link = cursor;
+	        cursor2 = cursor2->link;
+		cursor = cursor->link;
+                cursor2->link = 0;
 	     }
 	   }
-	 if(cursor1->data >= 7 && cursor1->data <= 9)
+	  if((cursor != 0) && (cursor->data >= 7 && cursor->data <= 9))
 	   {
 	     if(list3Empty)
 	       {
-		 headPtr3 = cursor1;
+		 headPtr3 = cursor;
 	         cursor3 = headPtr3;
-		 pre = cursor1;
-                 cursor1 = cursor1->link;
+                 cursor = cursor->link;
+	         cursor3->link = 0;
 	         list3Empty = false;
                }
               else
                {
-                 cursor3->link = cursor1;
-		 pre = cursor1;
-	         cursor1 = cursor1->link;
+                 cursor3->link = cursor;
+                 cursor3 = cursor3->link;
+	         cursor = cursor->link;
+                 cursor3->link = 0;
                }
+           
             }
-          if(cursor1->data < 0 || cursor1->data > 9)
+          if((cursor != 0) && (cursor->data < 0 || cursor->data > 9))
             {
-	      if(cursor1 == headPtr1)
-		headPtr1 = headPtr1->link;
-	      else 
-		pre->link = cursor1->link;
-	      delete cursor1;
+	      current = cursor;
+	      if(current == headPtr1)
+                {
+		  headPtr1 = headPtr1->link;
+                  cursor = cursor->link;
+                }
+	      else
+                {
+                  cursor = cursor->link;
+                }
+	      delete current;
             }
      }
-   if(countlist1 == 0)
+   if(list1Empty)
      {
        Node *newNodePtr1 = new Node;
        newNodePtr1->data = -99;

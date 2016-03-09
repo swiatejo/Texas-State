@@ -97,9 +97,9 @@ int main()
       PruneArray(intArr_LE5, used_LE5, 'L');
       PruneArray(intArr_GE7, used_GE7, 'G');
 
-      DebugShowCase(testCasesDone, TEST_CASES_TO_DO, intArr_INI, used_INI);
-
+     // DebugShowCase(testCasesDone, TEST_CASES_TO_DO, intArr_INI, used_INI);
       RemBadSplitGood(head, head_LE5, head_GE7);
+
 
       iLenChk = ListLengthCheck(head, used);
       if (iLenChk != 0)
@@ -114,9 +114,6 @@ int main()
          }
          else
          {
-	    ShowAll(cout, head);
-	    ShowAll(cout, head_LE5);
-	    ShowAll(cout, head_GE7);
             cout << "\"==6\" list node-count error ... too many (circular list?)" << endl;
             cout << "test_case: ";
             ShowArray(intArr_INI, used_INI);
