@@ -77,7 +77,7 @@ int main()
       DebugShowCase(testCasesDone, testCasesToDo, intArr1, used1, intArr2, used2);
 
       SortedMergeRecur(headX, headY, headZ);
-
+      cout << headZ->data << endl;
       if (headX != 0 || headY != 0)
       {
          cout << "ListX and/or ListY not empty ..." << endl;

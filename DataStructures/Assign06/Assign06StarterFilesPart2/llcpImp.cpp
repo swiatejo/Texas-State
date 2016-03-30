@@ -248,38 +248,63 @@ void ListClear(Node*& headPtr, int noMsg)
 void SortedMergeRecur(Node*& headPtrX, Node*& headPtrY, Node*& headPtrZ)
 {
   
- 
-  if(headPtrX == 0)
+  if(headPtrZ == 0)
   {
-    
-    cout << "x is 0" << endl;
-    headPtrZ = headPtrY;
-    //headPtrY = 0;
-  }
-  else if(headPtrY == 0)
-  {
-    cout << "y is 0" << endl;
-    headPtrZ = headPtrX;
-    //headPtrX = 0;
-  }
-  else if(headPtrX != 0 && headPtrY !=  0)
-  {
-    if(headPtrX->data <= headPtrY->data)
+    if (headPtrX != 0 && headPtrY != 0)
     {
-      cout << "hello" << endl;
-      headPtrZ = headPtrX;
-      cout << headPtrZ->data << endl;
-      SortedMergeRecur(headPtrX->link, headPtrY, headPtrZ);
-      
+      if (headPtrX->data <= headPtrY->data)
+      {
+        headPtrZ = headPtrX;
+        headPtrX = headPtrX->link;
+      }
+      else
+      {
+        headPtrZ = headPtrY;
+        headPtrY = headPtrY->link;
+      }
+      headPtrZ->link = 0;
+      SortedMergeRecur(headPtrX, headPtrY, headPtrZ);
     }
-    else if(headPtrX->data > headPtrY->data)
+    else if (headPtrX == 0)
     {
-      cout << "bye" << endl;
       headPtrZ = headPtrY;
-      cout << headPtrZ->data << endl;
-      SortedMergeRecur(headPtrX, headPtrY->link, headPtrZ);
+      headPtrY = 0;
+      return;
+    }
+    else if (headPtrY == 0)
+    {
+      headPtrZ = headPtrX;
+      headPtrX = 0;
+      return;
     }
   }
-//headPtrY = headPtrX = 0;
-return;   
+  else if (headPtrX != 0 && headPtrY != 0)
+  {
+    if (headPtrX->data <= headPtrY->data)
+    {
+      headPtrZ->link = headPtrX;
+      headPtrX = headPtrX->link;
+      SortedMergeRecur(headPtrX, headPtrY, headPtrZ);
+    }
+    else if (headPtrX->data > headPtrY->data)
+    {
+      headPtrZ = headPtrY;
+      headPtrY = headPtrY->link;
+      SortedMergeRecur(headPtrX, headPtrY, headPtrZ);
+    }
+  }
+  else if (headPtrX != 0 && headPtrY == 0)
+  {
+    headPtrZ->link = headPtrX;
+    headPtrX = 0;
+  }
+  else if (headPtrY != 0 && headPtrX == 0)
+  {
+    headPtrZ->link = headPtrY;
+    headPtrY = 0;
+  }
+  ShowAll(cout, headPtrZ);
+return;
 }
+  
+  
