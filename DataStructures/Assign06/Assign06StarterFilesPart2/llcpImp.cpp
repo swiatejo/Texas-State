@@ -245,4 +245,41 @@ void ListClear(Node*& headPtr, int noMsg)
 
 
 // definition of SortedMergeRecur
-
+void SortedMergeRecur(Node*& headPtrX, Node*& headPtrY, Node*& headPtrZ)
+{
+  
+ 
+  if(headPtrX == 0)
+  {
+    
+    cout << "x is 0" << endl;
+    headPtrZ = headPtrY;
+    //headPtrY = 0;
+  }
+  else if(headPtrY == 0)
+  {
+    cout << "y is 0" << endl;
+    headPtrZ = headPtrX;
+    //headPtrX = 0;
+  }
+  else if(headPtrX != 0 && headPtrY !=  0)
+  {
+    if(headPtrX->data <= headPtrY->data)
+    {
+      cout << "hello" << endl;
+      headPtrZ = headPtrX;
+      cout << headPtrZ->data << endl;
+      SortedMergeRecur(headPtrX->link, headPtrY, headPtrZ);
+      
+    }
+    else if(headPtrX->data > headPtrY->data)
+    {
+      cout << "bye" << endl;
+      headPtrZ = headPtrY;
+      cout << headPtrZ->data << endl;
+      SortedMergeRecur(headPtrX, headPtrY->link, headPtrZ);
+    }
+  }
+//headPtrY = headPtrX = 0;
+return;   
+}

@@ -74,7 +74,7 @@ int main()
       }
       CombineSortedNonDec(intArr1, intArr2, intArr3, used1, used2);
 
-      // DebugShowCase(testCasesDone, testCasesToDo, intArr1, used1, intArr2, used2);
+      DebugShowCase(testCasesDone, testCasesToDo, intArr1, used1, intArr2, used2);
 
       SortedMergeRecur(headX, headY, headZ);
 

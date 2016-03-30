@@ -22,5 +22,5 @@ double FindAverage(Node* headPtr);
 void   ListClear(Node*& headPtr, int noMsg = 0);
 
 // prototype of SortedMergeRecur
-
+void SortedMergeRecur(Node*& headPtrX, Node*& headPtrY, Node*& headPtrZ);
 #endif
