@@ -139,7 +139,7 @@ namespace CS3358_SP2016_Assign08
         ++used;
  
         size_type newIndex = used - 1;
-        while ((newIndex != 0) && (parent_priority(newIndex) < heap[newIndex].priority))
+        while ((newIndex != 0) && (parent_priority(newIndex) <= heap[newIndex].priority))
         {
           swap_with_parent(newIndex);
           newIndex = parent_index(newIndex);
@@ -158,7 +158,7 @@ namespace CS3358_SP2016_Assign08
       {
         size_type entry = 0;
         heap[entry] = heap[used - 1];
-        while ((!is_leaf(entry)) && (heap[entry].priority < big_child_priority(entry)))
+        while ((!is_leaf(entry)) && (heap[entry].priority <= big_child_priority(entry)))
         {
           swap_with_parent(big_child_index(entry));
           entry = big_child_index(entry);
