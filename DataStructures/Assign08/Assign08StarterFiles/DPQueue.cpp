@@ -160,8 +160,9 @@ namespace CS3358_SP2016_Assign08
         heap[entry] = heap[used - 1];
         while ((!is_leaf(entry)) && (heap[entry].priority <= big_child_priority(entry)))
         {
+          size_type old_entry = big_child_index(entry);
           swap_with_parent(big_child_index(entry));
-          entry = big_child_index(entry);
+          entry = old_entry;
         }
        --used;
       }
