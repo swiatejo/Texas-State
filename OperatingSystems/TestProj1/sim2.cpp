@@ -409,16 +409,27 @@ int main(int argc, char * argv[])
 	//Sets number of processes
 	int num_processes = 100;
 
-	srand((unsigned)time(0));
 	int random_burst;
-	int importance;
 
 	//vector will serve as the ready queue
 	vector <process> processes;
 
-	
-	int num_rand = num_processes;
+        int num_rand = num_processes * .8;
+	int num_zero = num_processes - num_rand;
 
+	//Creates processes with zero arrival time
+	for (int i = 0; i < num_zero; i++)
+	{
+		float lambda = arrival_rate;
+                float mu = 1/service_time;
+                float x = genexp(lambda);
+                float y = genexp(mu);
+                y = 1000 * y;
+		process temp((int)y, 0, i+1);
+		processes.push_back(temp);
+	}
+
+	float save;
 	//Creates processes with non zero arrival time
 	for(int i = 0; i < num_rand; i++)
 	{
@@ -426,11 +437,15 @@ int main(int argc, char * argv[])
                 float mu = 1/service_time;
 		float x = genexp(lambda);
 		float y = genexp(mu);
-		cout << y << endl;
 		y = 1000 * y;
-		cout << y << endl;
-		process temp((int)y, (int)x, (i+1));
+		if(i == 0){
+		  process temp((int)y, (int)x, i+1);
+                }
+                else{
+	          process temp((int)y, (int)x+save, i+1);
+		}
 		processes.push_back(temp);
+                save = x;
       	}
 
 	//Sorts processes by arrival time
