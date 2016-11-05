@@ -1,24 +1,4 @@
-nclude <iostream>
-#include <iomanip>
-#include <cstdlib>
-#include <sstream>
-#include <math.h>
-#include <queue>
-using namespace std;
 
-//event definitions
-#define ARRIVAL 1
-#define DEPART 2
-#define TIME_SLICE 3
-
-
-struct event{
-        float time;
-        int   type;
-//      struct event *next;
-        bool operator>(const event& rhs){
-           return time > rhs.time;
-        }
 #include <iostream>
 #include <iomanip>
 #include <cstdlib>
@@ -34,13 +14,15 @@ using namespace std;
 
 
 struct event{
+	int   id;
         float time;
         int   type;
-//      struct event *next;
-        bool operator>(const event& rhs){
-           return time > rhs.time;
-        }
+        
+	bool operator < (struct event& e1){
+		return time > e1.time;
+	}
 };
+
 
 //Prototypes for Function
 void init();
@@ -64,8 +46,6 @@ float sim_clock;                //simulator clock
 void init()
 {
   
-  priority_queue<event*> e_queue;
-  e_queue.push( event(3.00, 1) );
 }
 
 //Function: run_sim(int sim)
@@ -81,7 +61,7 @@ void generate_report()
 }
 
 //Function:schedule_event(struct event*)
-//Schedule a new event
+//Schedule a new event`
 int schedule_event(struct event* )
 {
 return 0;
@@ -119,8 +99,6 @@ float urand()
 //returns a random number that follows an exponential distribution
 float genexp(float lambda)
 {
-{
-{
    float u,x;
    x = 0;
    while (x == 0)
@@ -154,7 +132,8 @@ int main(int argc, char* argv[])
          istringstream(argv[4]) >> quantum;
       }
 
-      cout << urand() << "    " << genexp(service_time) << endl;
+      cout << urand() << "    " << genexp(arrival_rate) <<  "   " << genexp(service_time) << endl;
+      cout << urand() << "    " << genexp(arrival_rate) <<  "   " << genexp(service_time) << endl;
 
 
 

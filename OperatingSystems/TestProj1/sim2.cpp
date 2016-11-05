@@ -439,11 +439,12 @@ int main(int argc, char * argv[])
 		float y = genexp(mu);
 		y = 1000 * y;
 		if(i == 0){
-		  process temp((int)y, (int)x, i+1);
+		  
                 }
                 else{
-	          process temp((int)y, (int)x+save, i+1);
+	          
 		}
+                process temp((int)y, 
 		processes.push_back(temp);
                 save = x;
       	}
