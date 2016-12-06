@@ -34,49 +34,6 @@ int t1=0, t2=1, t3=2, t4=3;
 pthread_t threads[4];
 
 
-//Begining of MAIN()
-int main(int argc, char *argv[]){
-	
-	//check for argument
-	if (argc !=2){
-		fprintf(stderr,"Failed to find argument for seed. \n");
-		return(-1);
-	}
-	//Create Log file
-        logfile = fopen("log.txt","a");
-
-	//check file is good
-        if (logfile == NULL){
-		fprintf(stderr,"Failed to open Log File.\n");
-		return(-1);
-	}
-
-	//print start of log file
-        fprintf(logfile,"\n***-------***-------***\nSTART NEW GAME!\n\n");
-
-	//Initialize cond/mutex and IDs for threads
-	pthread_mutex_init(&mutex, NULL);
-	pthread_cond_init(&cond, NULL);
-
-	//assign seed argument
-	seed = atoi(argv[1]);
-
-	//create dealer thread
-        create_threads(4);
-
-	//Join threads back together
-	int i;
-	for (i=0; i<NUM_THREADS; i++){
-           pthread_join(threads[i], NULL);
-  	}
-
-	//Garbage collection
-	pthread_mutex_destroy(&mutex);
-	pthread_cond_destroy(&cond);
-
-	return(0);
-}
-//End of MAIN()
 //Fucntion to shuffle cards
 void shuffle_deck()
 {
@@ -475,3 +432,46 @@ void printDeckCon()
 }
 
 
+//Begining of MAIN()
+int main(int argc, char *argv[]){
+	
+	//check for argument
+	if (argc !=2){
+		fprintf(stderr,"Failed to find argument for seed. \n");
+		return(-1);
+	}
+	//Create Log file
+        logfile = fopen("log.txt","a");
+
+	//check file is good
+        if (logfile == NULL){
+		fprintf(stderr,"Failed to open Log File.\n");
+		return(-1);
+	}
+
+	//print start of log file
+        fprintf(logfile,"\n*************************************************************\nSTART NEW GAME!\n\n");
+
+	//Initialize cond/mutex and IDs for threads
+	pthread_mutex_init(&mutex, NULL);
+	pthread_cond_init(&cond, NULL);
+
+	//assign seed argument
+	seed = atoi(argv[1]);
+
+	//create dealer thread
+        create_threads(4);
+
+	//Join threads back together
+	int i;
+	for (i=0; i<NUM_THREADS; i++){
+           pthread_join(threads[i], NULL);
+  	}
+
+	//Garbage collection
+	pthread_mutex_destroy(&mutex);
+	pthread_cond_destroy(&cond);
+
+	return(0);
+}
+//End of MAIN()

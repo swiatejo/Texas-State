@@ -12,5 +12,5 @@ $(TARGET):      $(SRCS)
 
 
 clean:
-	 @rm $(TARGET) 
+	 @rm $(TARGET) log.txt 
 
