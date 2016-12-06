@@ -23,12 +23,12 @@ FILE *logfile;
 void *ptrID;
 int seed;
 int deck[52];
-int player1_hand[2];
-int player2_hand[2];
-int player3_hand[2];
+int player1[2];
+int player2[2];
+int player3[2];
 int thread_ids[4] = {0,1,2,3};
 int startPlayer;
-int topDeck = 0;
+int topOfDeck = 0;
 int roundWin = 0;
 int t1=0, t2=1, t3=2, t4=3;
 pthread_t threads[4];
@@ -69,11 +69,11 @@ void* dealer(void* t){
 	shuffle_deck();
 
 	//Deal first round of cards
-	player1_hand[0] = deck[0] % 13;
-	player2_hand[0] = deck[1] % 13;
-	player3_hand[0] = deck[2] % 13;
+	player1[0] = deck[0] % 13;
+	player2[0] = deck[1] % 13;
+	player3[0] = deck[2] % 13;
 
-	topDeck = 3;
+	topOfDeck = 3;
 	startPlayer = 1;
 
 	//unlock the mutex and broadcast cond so players can play
@@ -88,7 +88,7 @@ void* dealer(void* t){
 
 	//reset globals
 	startPlayer = -1;
-	topDeck = 0;
+	topOfDeck = 0;
 	roundWin = 0;
 
 	//lock the mutex
@@ -109,11 +109,11 @@ void* dealer(void* t){
 	shuffle_deck();
 
 	//Deal second round of cards
-	player2_hand[0] = deck[0] % 13;
-	player3_hand[0] = deck[1] % 13;
-	player1_hand[0] = deck[2] % 13;
+	player2[0] = deck[0] % 13;
+	player3[0] = deck[1] % 13;
+	player1[0] = deck[2] % 13;
 
-	topDeck = 3;
+	topOfDeck = 3;
 	startPlayer = 2;
 
 	//unlock the mutex and braodcast cond
@@ -127,7 +127,7 @@ void* dealer(void* t){
 
 	//reset globals
 	startPlayer = -1;
-	topDeck = 0;
+	topOfDeck = 0;
 	roundWin = 0;
 
 	//lock the mutex
@@ -148,11 +148,11 @@ void* dealer(void* t){
 	shuffle_deck();
 
 	//Deal third round of cards
-	player3_hand[0] = deck[0] % 13;
-	player1_hand[0] = deck[1] % 13;
-	player2_hand[0] = deck[2] % 13;
+	player3[0] = deck[0] % 13;
+	player1[0] = deck[1] % 13;
+	player2[0] = deck[2] % 13;
 
-	topDeck = 3;
+	topOfDeck = 3;
 	startPlayer = 3;
 	
 	//unlock the mutex and broadcast cond
@@ -185,14 +185,14 @@ void* player(void* t){
 		//check player id and play that hand
 		if (my_id == 1){
 			printHandLog(my_id);
-			player1_hand[1] = deck[topDeck] % 13;
-			++topDeck;
-			fprintf(logfile, "PLAYER 1: draws %i\n", player1_hand[1]);
-			fprintf(logfile, "PLAYER 1: hand %i ", player1_hand[0]);
-			fprintf(logfile, "%i\n", player1_hand[1]);
+			player1[1] = deck[topOfDeck] % 13;
+			++topOfDeck;
+			fprintf(logfile, "PLAYER 1: draws %i\n", player1[1]);
+			fprintf(logfile, "PLAYER 1: hand %i ", player1[0]);
+			fprintf(logfile, "%i\n", player1[1]);
 			printHandCon(my_id);
 			fflush(logfile);
-			if (player1_hand[0] == player1_hand[1]){
+			if (player1[0] == player1[1]){
 				//output win
 				fprintf(logfile, "PLAYER 1: wins \n");
 				fprintf(logfile, "PLAYER %i: exits round \n", my_id);
@@ -213,12 +213,12 @@ void* player(void* t){
 				printDeckCon();
 				n = rand() % 2;
 				if (n == 0){
-					fprintf(logfile, "PLAYER 1: discards %i\n", player1_hand[0]);
-                                        player1_hand[0] = player1_hand[1];
+					fprintf(logfile, "PLAYER 1: discards %i\n", player1[0]);
+                                        player1[0] = player1[1];
 					printHandLog(my_id);
 					printDeckLog();
 				}else{
-					fprintf(logfile, "PLAYER 1: discards %i\n", player1_hand[1]);
+					fprintf(logfile, "PLAYER 1: discards %i\n", player1[1]);
 					printHandLog(my_id);
 					printDeckLog();
 				}
@@ -231,13 +231,13 @@ void* player(void* t){
 		}
 		else if (my_id == 2){
 			printHandLog(my_id);
-			player2_hand[1] = deck[topDeck] % 13;
-			++topDeck;
-			fprintf(logfile, "PLAYER 2: draws %i\n", player2_hand[1]);
-			fprintf(logfile, "PLAYER 2: hand %i ", player2_hand[0]);
-			fprintf(logfile, "%i\n", player2_hand[1]);
+			player2[1] = deck[topOfDeck] % 13;
+			++topOfDeck;
+			fprintf(logfile, "PLAYER 2: draws %i\n", player2[1]);
+			fprintf(logfile, "PLAYER 2: hand %i ", player2[0]);
+			fprintf(logfile, "%i\n", player2[1]);
 			printHandCon(my_id);
-			if (player2_hand[0] == player2_hand[1]){
+			if (player2[0] == player2[1]){
 				//output win
 				fprintf(logfile, "PLAYER 2: wins \n");
 				fprintf(logfile, "PLAYER %i: exits round \n", my_id);
@@ -257,12 +257,12 @@ void* player(void* t){
 				printDeckCon();
 				n = rand() % 2;
 				if (n == 0){
-					fprintf(logfile, "PLAYER 2: discards %i\n", player2_hand[0]);
-                                        player2_hand[0] = player2_hand[1];
+					fprintf(logfile, "PLAYER 2: discards %i\n", player2[0]);
+                                        player2[0] = player2[1];
 					printHandLog(my_id);
 					printDeckLog();
 				}else{
-					fprintf(logfile, "PLAYER 2: discards %i\n", player2_hand[1]);
+					fprintf(logfile, "PLAYER 2: discards %i\n", player2[1]);
 					printHandLog(my_id);
 					printDeckLog();
 				}
@@ -274,14 +274,14 @@ void* player(void* t){
 			}
 		}
 		else if (my_id == 3){
-			player3_hand[1] = deck[topDeck] % 13;
+			player3[1] = deck[topOfDeck] % 13;
 			printHandLog(my_id);
-			++topDeck;
-			fprintf(logfile, "PLAYER 3: draws %i\n", player3_hand[1]);
-			fprintf(logfile, "PLAYER 3: hand %i ", player3_hand[0]);
-			fprintf(logfile, "%i\n", player3_hand[1]);
+			++topOfDeck;
+			fprintf(logfile, "PLAYER 3: draws %i\n", player3[1]);
+			fprintf(logfile, "PLAYER 3: hand %i ", player3[0]);
+			fprintf(logfile, "%i\n", player3[1]);
 			printHandCon(my_id);
-			if (player3_hand[0] == player3_hand[1]){
+			if (player3[0] == player3[1]){
 				//output win
 				fprintf(logfile, "PLAYER 3: wins \n");
 				fprintf(logfile, "PLAYER %i: exits round \n", my_id);
@@ -301,12 +301,12 @@ void* player(void* t){
 				printDeckCon();
 				n = rand() % 2;
 				if (n == 0){
-					fprintf(logfile, "PLAYER 3: discards %i\n", player3_hand[0]);
-                                        player3_hand[0] = player3_hand[1];
+					fprintf(logfile, "PLAYER 3: discards %i\n", player3[0]);
+                                        player3[0] = player3[1];
 					printHandLog(my_id);
 					printDeckLog();
 				}else{
-					fprintf(logfile, "PLAYER 3: discards %i\n", player3_hand[1]);
+					fprintf(logfile, "PLAYER 3: discards %i\n", player3[1]);
 					printHandLog(my_id);
 					printDeckLog();
 				}
@@ -371,17 +371,17 @@ void printHandLog(int play_id)
 	switch (play_id){
 	case 1:
 		fprintf(logfile, "PLAYER %i: hand ", play_id);
-		fprintf(logfile, "%i", player1_hand[0]); 
+		fprintf(logfile, "%i", player1[0]); 
     	fprintf(logfile,"\n");
 		break;
 	case 2:
 		fprintf(logfile, "PLAYER %i: hand ", play_id);
-		fprintf(logfile, "%i", player2_hand[0]); 
+		fprintf(logfile, "%i", player2[0]); 
     	fprintf(logfile,"\n");
 		break;
 	case 3:
 		fprintf(logfile, "PLAYER %i: hand ", play_id);
-		fprintf(logfile, "%i", player3_hand[0]); 
+		fprintf(logfile, "%i", player3[0]); 
     	fprintf(logfile,"\n");
 		break;
 	}
@@ -392,18 +392,18 @@ void printHandCon(int play_id)
 {
 	switch (play_id){
 	case 1:
-		fprintf(stdout, "PLAYER 1: hand %i ", player1_hand[0]);
-		fprintf(stdout, "%i", player1_hand[1]); 
+		fprintf(stdout, "PLAYER 1: hand %i ", player1[0]);
+		fprintf(stdout, "%i", player1[1]); 
     	fprintf(stdout,"\n");
 		break;
 	case 2:
-		fprintf(stdout, "PLAYER 2: hand %i ", player2_hand[0]);
-		fprintf(stdout, "%i", player2_hand[1]); 
+		fprintf(stdout, "PLAYER 2: hand %i ", player2[0]);
+		fprintf(stdout, "%i", player2[1]); 
     	fprintf(stdout,"\n");
 		break;
 	case 3:
-		fprintf(stdout, "PLAYER 3: hand %i ", player3_hand[0]);
-		fprintf(stdout, "%i", player3_hand[1]); 
+		fprintf(stdout, "PLAYER 3: hand %i ", player3[0]);
+		fprintf(stdout, "%i", player3[1]); 
     	fprintf(stdout,"\n");
 		break;
 	}
@@ -414,7 +414,7 @@ void printDeckLog()
 {
 	fprintf(logfile,"DECK: ");
 	int x;
-	for (x=topDeck; x<52; ++x){
+	for (x=topOfDeck; x<52; ++x){
        fprintf(logfile,"%i ", deck[x]);
     }
     fprintf(logfile,"\n");
@@ -425,7 +425,7 @@ void printDeckCon()
 {
 	fprintf(stdout,"DECK: ");
 	int x;
-	for (x=topDeck; x<52; ++x){
+	for (x=topOfDeck; x<52; ++x){
        fprintf(stdout,"%i ", deck[x]);
     }
     fprintf(stdout,"\n");
